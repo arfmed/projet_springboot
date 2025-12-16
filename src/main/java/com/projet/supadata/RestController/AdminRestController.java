@@ -70,7 +70,7 @@ public class AdminRestController {
 
 
 
-    @PostMapping("/login")
+    @PostMapping("/Login")
     public ResponseEntity<Map<String, Object>> loginAdmin(@RequestBody Admin admin) {
         System.out.println("in login-admin"+admin);
         HashMap<String, Object> response = new HashMap<>();
