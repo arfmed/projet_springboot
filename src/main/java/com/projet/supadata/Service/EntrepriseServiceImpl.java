@@ -26,7 +26,6 @@ public class EntrepriseServiceImpl implements EntrepriseService{
     public void supprimerEnreprise(Long id) {
         entrepriseRepository.deleteById(id);
     }
-
     @Override
     public List<Entreprise> afficherEntreprises() {
         return entrepriseRepository.findAll();

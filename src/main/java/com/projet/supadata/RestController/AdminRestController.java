@@ -8,6 +8,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
@@ -18,6 +20,9 @@ import java.util.Optional;
 @CrossOrigin("*")
 @RequestMapping(value ="/admin")
 public class AdminRestController {
+    @Autowired
+    MailSender mailSender;
+
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
@@ -28,16 +33,47 @@ public class AdminRestController {
 
     @RequestMapping(method = RequestMethod.POST )
     ResponseEntity<?> AjouterAdmin (@RequestBody Admin admin){
-
         HashMap<String, Object> response = new HashMap<>();
+
         if(adminRepository.existsByEmail(admin.getEmail())){
             response.put("message", "email exist deja !");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }else{
-            admin.setMdp(this.bCryptPasswordEncoder.encode(admin.getMdp()));
+        } else {
+
+
+            String rawPassword = admin.getMdp();
+
+
+            admin.setMdp(this.bCryptPasswordEncoder.encode(rawPassword));
+
             Admin savedUser = adminRepository.save(admin);
+
+            try {
+                SimpleMailMessage message = new SimpleMailMessage();
+
+                message.setTo(admin.getEmail());
+                message.setSubject("Votre compte a été créé");
+
+                message.setText(
+                        "Bonjour " + admin.getPrenom() + ",\n\n" +
+                                "Votre compte a été créé avec succès.\n\n" +
+                                "Email: " + admin.getEmail() + "\n" +
+                                "Mot de passe: " + rawPassword + "\n\n" +
+                                "Veuillez vous connecter, changer votre mot de passe.\n\n" +
+                                "Merci."
+                );
+
+                mailSender.send(message);
+
+            } catch (Exception e) {
+                System.out.println("❌ Error sending email to: " + admin.getEmail());
+                e.printStackTrace();
+                throw e;
+            }
+
             return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
         }
+
     }
 
     @RequestMapping(method = RequestMethod.GET)

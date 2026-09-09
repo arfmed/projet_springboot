@@ -1,17 +1,9 @@
 package com.projet.supadata.Entity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+
 import lombok.Data;
 
-@Entity
 @Data
-public class Entreprise
-{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long   id;
+public class EntrepriseRequest {
     private String profilepicture ;
     private String companylogo ;
     private String coverphoto;
@@ -29,5 +21,4 @@ public class Entreprise
     private String fblink;
     private String linkedinlink;
     private String githublink;
-    private boolean etat;
 }

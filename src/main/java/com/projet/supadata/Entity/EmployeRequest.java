@@ -1,26 +1,19 @@
 package com.projet.supadata.Entity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+
 import lombok.Data;
 
-@Entity
 @Data
-public class Entreprise
-{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long   id;
+public class EmployeRequest {
     private String profilepicture ;
     private String companylogo ;
     private String coverphoto;
     private String nom ;
+    private String prenom;
     private String jobtitle;
     private String departement;
     private String companyname;
     private String email ;
-    private String mdp;
+    private String pwd;
     private Long   telephone;
     private String urlcompany;
     private String adresse;
@@ -29,5 +22,6 @@ public class Entreprise
     private String fblink;
     private String linkedinlink;
     private String githublink;
-    private boolean etat;
+
+
 }

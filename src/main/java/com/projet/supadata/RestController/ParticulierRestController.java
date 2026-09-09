@@ -35,7 +35,7 @@ public class ParticulierRestController {
             response.put("message", "email exist deja !");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }else{
-            particulier.setMdp(this.bCryptPasswordEncoder.encode(particulier.getMdp()));
+            particulier.setPwd(this.bCryptPasswordEncoder.encode(particulier.getPwd()));
             Particulier savedUser = particulierRepository.save(particulier);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
         }
@@ -61,7 +61,7 @@ public class ParticulierRestController {
 
     @RequestMapping(value = "/{id}" ,method = RequestMethod.PUT)
     public Particulier Modifierparticulier(@PathVariable("id")Long id, @RequestBody Particulier particulier){
-        particulier.setMdp(this.bCryptPasswordEncoder.encode(particulier.getMdp()));
+        particulier.setPwd(this.bCryptPasswordEncoder.encode(particulier.getPwd()));
         Particulier savedUser = particulierRepository.save(particulier);
 
         Particulier newparticulier = particulierService.modifierParticulier(particulier);
@@ -82,7 +82,7 @@ public class ParticulierRestController {
             response.put("message", "particulier not found!");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } else {
-            boolean compare = this.bCryptPasswordEncoder.matches(particulier.getMdp(), userFromDB.getMdp());
+            boolean compare = this.bCryptPasswordEncoder.matches(particulier.getPwd(), userFromDB.getPwd());
             System.out.println("compare"+compare);
             if (!compare) {
                 response.put("message", "Password incorrect!");
